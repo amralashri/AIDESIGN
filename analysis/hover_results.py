@@ -41,7 +41,8 @@ def displacement_tip(result,units,node_id):
 def shell_tip(project,result,units,area_id,mode,x,y):
     if area_id not in result.area_results:
         return None
-    key={"Slab Mx":"Mx","Slab My":"My","Slab Mxy":"Mxy","Slab Qx":"Qx",
+    key={"Slab Mx":"Mx","Slab My":"My","Slab Mxy":"Mxy",
+         "Slab Mmax":"Mmax","Slab Mmin":"Mmin","Slab Qx":"Qx",
          "Slab Qy":"Qy","Slab Deflection":"w"}.get(mode)
     if not key:
         return None

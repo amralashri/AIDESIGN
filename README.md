@@ -789,3 +789,26 @@ py main.py
 ## Scope note
 
 This sprint establishes the CAD/UI/model database foundation. It does not yet perform structural analysis. FEM will be developed and validated in the next sprint.
+
+# AIDESIGN v1.6.0 — Shell Quality & Smoothed Principal Contours
+
+This sprint improves the existing Q4 Mindlin-Reissner shell workflow without
+claiming a full commercial MITC4 replacement.
+
+## Added
+
+- shell finite-element quality metrics: aspect ratio, corner angles, skew,
+  warpage, Gauss-point Jacobian ratio and an overall quality score;
+- a permanent **Shell Mesh Quality** dock and `Analyze > Shell Mesh Quality`;
+- model-check warnings/errors for marginal or poor quadrilateral elements;
+- principal shell bending moments `Mmax`, `Mmin` and principal angle;
+- model-wide nodal averaging for smoother compatible slab contours;
+- principal moment contours in Plan and 3D;
+- hover queries for principal moments;
+- expanded shell-result tables.
+
+## Engineering note
+
+Contour smoothing is a visualization/post-processing operation. Element
+resultants remain available and the solver stiffness formulation is unchanged.
+Distorted meshes should be corrected rather than hidden by smoothing.

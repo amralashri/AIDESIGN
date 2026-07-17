@@ -51,7 +51,7 @@ class UnitSystem:
     def displacement_component(self,value):
         return self.format(value,"displacement",5)
     def shell_result(self,key,value):
-        if key in ("Mx","My","Mxy"):
+        if key in ("Mx","My","Mxy","Mmax","Mmin"):
             return f"{self.convert(value,'force'):.3f} {self.unit('force')}·m/m"
         if key in ("Nx","Ny","Nxy","Qx","Qy"):
             return f"{self.convert(value,'force'):.3f} {self.unit('force')}/m"

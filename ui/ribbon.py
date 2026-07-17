@@ -245,6 +245,7 @@ class RibbonWidget(QTabWidget):
         self.analyze_check_btn = analysis_tab.add_button("Check", "✓")
         self.analyze_run_btn = analysis_tab.add_button("Run", "▶")
         self.pdelta_btn = analysis_tab.add_button("P-Delta", "PΔ")
+        self.shell_quality_btn = analysis_tab.add_button("Shell Quality", "Q4")
 
         # DISPLAY
         results = display.group("Analysis Results")
@@ -257,6 +258,8 @@ class RibbonWidget(QTabWidget):
         contours = display.group("Slab Contours")
         self.contour_mx_btn = contours.add_button("Mx", "▨")
         self.contour_my_btn = contours.add_button("My", "▨")
+        self.contour_mmax_btn = contours.add_button("Mmax", "M+")
+        self.contour_mmin_btn = contours.add_button("Mmin", "M−")
         self.contour_qx_btn = contours.add_button("Qx", "▧")
         self.contour_def_btn = contours.add_button("Deflection", "◫")
 

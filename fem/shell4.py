@@ -251,13 +251,33 @@ def shell_resultants_at(
     membrane = membrane_d @ (bm @ local_displacements)
     moment = bending_d @ (bb @ local_displacements)
     shear = shear_d @ (bs @ local_displacements)
+    mx = float(moment[0])
+    my = float(moment[1])
+    mxy = float(moment[2])
+    average = 0.5 * (mx + my)
+    radius = float(np.hypot(0.5 * (mx - my), mxy))
+    mmax = average + radius
+    mmin = average - radius
+    angle = 0.5 * float(np.degrees(np.arctan2(2.0*mxy, mx-my)))
+
+    nx = float(membrane[0])
+    ny = float(membrane[1])
+    nxy = float(membrane[2])
+    navg = 0.5 * (nx + ny)
+    nradius = float(np.hypot(0.5 * (nx - ny), nxy))
+
     return {
-        "Nx": float(membrane[0]),
-        "Ny": float(membrane[1]),
-        "Nxy": float(membrane[2]),
-        "Mx": float(moment[0]),
-        "My": float(moment[1]),
-        "Mxy": float(moment[2]),
+        "Nx": nx,
+        "Ny": ny,
+        "Nxy": nxy,
+        "Nmax": navg + nradius,
+        "Nmin": navg - nradius,
+        "Mx": mx,
+        "My": my,
+        "Mxy": mxy,
+        "Mmax": mmax,
+        "Mmin": mmin,
+        "Mangle": angle,
         "Qx": float(shear[0]),
         "Qy": float(shear[1]),
     }

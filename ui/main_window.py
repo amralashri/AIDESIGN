@@ -31,6 +31,7 @@ from core.units import UnitSystem
 from ui.unit_status import UnitStatusWidget
 from analysis.modal_solver import ModalSolver
 from ui.modal_results_panel import ModalResultsPanel
+from ui.shell_quality_panel import ShellQualityPanel
 from ui.code_settings import CodeSettingsDialog,CodeSettingsWidget
 from ui.advanced_assignments import (
     DiaphragmDialog,FrameReleaseDialog,RigidEndOffsetDialog,
@@ -136,6 +137,8 @@ class MainWindow(QMainWindow):
         self.action_check.setShortcut(QKeySequence("F6"))
         self.action_run=QAction("Run Analysis",self)
         self.action_pdelta=QAction("Run P-Delta Analysis...",self)
+        self.action_shell_quality=QAction("Shell Mesh Quality...",self)
+        self.action_shell_quality.setShortcut(QKeySequence("Ctrl+Q"))
         self.action_run.setShortcut(QKeySequence("F5"))
 
         self.action_none=QAction("Undeformed Model",self)
@@ -281,7 +284,8 @@ class MainWindow(QMainWindow):
 
         analyze_menu=menu.addMenu("&Analyze")
         analyze_menu.addActions([
-            self.action_check,self.action_run,self.action_pdelta,
+            self.action_check,self.action_shell_quality,
+            self.action_run,self.action_pdelta,
             self.action_modal,self.action_mode_shape,
         ])
 
@@ -571,6 +575,18 @@ class MainWindow(QMainWindow):
         )
         self.tabifyDockWidget(
             self.design_dock,self.advanced_design_dock
+        )
+
+        self.shell_quality_panel=ShellQualityPanel()
+        self.shell_quality_dock=QDockWidget("Shell Mesh Quality",self)
+        self.shell_quality_dock.setObjectName("ShellQualityDock")
+        self.shell_quality_dock.setWidget(self.shell_quality_panel)
+        self.addDockWidget(
+            Qt.DockWidgetArea.BottomDockWidgetArea,
+            self.shell_quality_dock,
+        )
+        self.tabifyDockWidget(
+            self.results_dock,self.shell_quality_dock
         )
 
 
@@ -873,6 +889,12 @@ class MainWindow(QMainWindow):
         self.ribbon.contour_my_btn.clicked.connect(
             lambda:self.display_results("Slab My")
         )
+        self.ribbon.contour_mmax_btn.clicked.connect(
+            lambda:self.display_results("Slab Mmax")
+        )
+        self.ribbon.contour_mmin_btn.clicked.connect(
+            lambda:self.display_results("Slab Mmin")
+        )
         self.ribbon.contour_qx_btn.clicked.connect(
             lambda:self.display_results("Slab Qx")
         )
@@ -960,6 +982,12 @@ class MainWindow(QMainWindow):
         )
         self.action_pdelta.triggered.connect(
             self.run_pdelta_analysis
+        )
+        self.action_shell_quality.triggered.connect(
+            self.show_shell_quality
+        )
+        self.ribbon.shell_quality_btn.clicked.connect(
+            self.show_shell_quality
         )
         self.action_about.triggered.connect(self.show_about)
 
@@ -1203,6 +1231,12 @@ class MainWindow(QMainWindow):
         QMessageBox.information(self,"Import DXF",message)
         self.log_message(message)
 
+    def show_shell_quality(self):
+        self.shell_quality_panel.refresh(self.project)
+        self.shell_quality_dock.show()
+        self.shell_quality_dock.raise_()
+        self.log_message("Shell mesh quality report updated.")
+
     def check_model(self):
         report=check_model(self.project)
         self.log_message(report.as_text())
@@ -1442,6 +1476,7 @@ class MainWindow(QMainWindow):
         self.plan.set_concrete_design_result(None)
         self.view3d.set_concrete_design_result(None)
         self.results_dock.show()
+        self.shell_quality_dock.show()
         self.code_dock.show()
         self.design_dock.show()
         self.results_dock.raise_()
