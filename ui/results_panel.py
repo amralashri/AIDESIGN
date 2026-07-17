@@ -22,6 +22,7 @@ class ResultsPanel(QWidget):
         "None", "Deformed", "Moment", "Shear",
         "Axial", "Torsion", "Reactions",
         "Slab Mx", "Slab My", "Slab Mxy",
+        "Slab Mmax", "Slab Mmin",
         "Slab Qx", "Slab Qy", "Slab Deflection",
         "Beam Rebar", "Slab Rebar X", "Slab Rebar Y",
         "Slab As X", "Slab As Y",
@@ -66,7 +67,7 @@ class ResultsPanel(QWidget):
         self.tabs.addTab(self.reaction_table, "Support Reactions")
         self.area_table = self._table([
             "Area","Area m²","Nx","Ny","Nxy",
-            "Mx","My","Mxy","Qx","Qy",
+            "Mx","My","Mxy","Mmax","Mmin","Angle","Qx","Qy",
         ])
         self.tabs.addTab(self.force_table, "Frame End Forces")
         self.tabs.addTab(self.area_table, "Slab / Shell Resultants")
@@ -172,9 +173,13 @@ class ResultsPanel(QWidget):
             r=item.resultants
             ar.append([f"A{area_id}",f"{u.convert(item.area,'area'):.4f}",
                        *(f"{u.convert(r[k],'force'):.6f}" for k in
-                         ("Nx","Ny","Nxy","Mx","My","Mxy","Qx","Qy"))])
+                         ("Nx","Ny","Nxy","Mx","My","Mxy","Mmax","Mmin")),
+                       f"{r.get('Mangle',0.0):.3f}",
+                       *(f"{u.convert(r[k],'force'):.6f}" for k in ("Qx","Qy"))])
         self.area_table.setHorizontalHeaderLabels(
             ["Area",f"Area {au}",f"Nx {fu}/m",f"Ny {fu}/m",f"Nxy {fu}/m",
-             f"Mx {fu}·m/m",f"My {fu}·m/m",f"Mxy {fu}·m/m",f"Qx {fu}/m",f"Qy {fu}/m"]
+             f"Mx {fu}·m/m",f"My {fu}·m/m",f"Mxy {fu}·m/m",
+             f"Mmax {fu}·m/m",f"Mmin {fu}·m/m","Angle deg",
+             f"Qx {fu}/m",f"Qy {fu}/m"]
         )
         self._populate(self.area_table,ar)

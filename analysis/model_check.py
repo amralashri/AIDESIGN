@@ -3,6 +3,8 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 
 from model.project import ProjectModel
+from analysis.shell_quality import evaluate_shell_quality
+import numpy as np
 
 
 @dataclass(slots=True)
@@ -119,6 +121,28 @@ def check_model(project: ProjectModel) -> ModelCheckReport:
                     f"Area A{area.id} uses undefined load pattern "
                     f"'{pattern}'."
                 )
+        try:
+            points=np.array([
+                [project.nodes[nid].x,project.nodes[nid].y,project.nodes[nid].z]
+                for nid in area.nodes
+            ],dtype=float)
+            quality=evaluate_shell_quality(points,area.id)
+            if quality.status=="Poor":
+                report.errors.append(
+                    f"Area A{area.id} has poor mesh quality "
+                    f"(aspect={quality.aspect_ratio:.2f}, "
+                    f"min angle={quality.minimum_angle_deg:.1f}°, "
+                    f"Jacobian={quality.jacobian_ratio:.3f})."
+                )
+            elif quality.status=="Warning":
+                report.warnings.append(
+                    f"Area A{area.id} has marginal mesh quality "
+                    f"(score={quality.quality_score:.2f})."
+                )
+        except Exception as exc:
+            report.errors.append(
+                f"Area A{area.id} geometry is invalid: {exc}"
+            )
 
     for node_id, count in connectivity.items():
         if count == 0 and node_id not in area_nodes:

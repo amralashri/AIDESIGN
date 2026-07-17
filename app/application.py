@@ -7,7 +7,7 @@ from ui.main_window import MainWindow
 
 
 class AIDesignApplication(MainWindow):
-    VERSION = "1.5.0"
+    VERSION = "1.6.0"
 
     def __init__(self) -> None:
         self.settings = QSettings("AIDESIGN", "AIDESIGN")

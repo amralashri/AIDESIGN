@@ -1,14 +1,15 @@
 {
-  "version": "1.5.0",
+  "version": "1.6.0",
+  "python_files": 85,
   "compile_errors": [],
-  "test_output": "...........................................                              [100%]\n43 passed in 0.78s",
+  "test_return_code": 0,
+  "test_output": "................................................                         [100%]\n48 passed in 0.77s\n",
+  "ui_startup_smoke_test": "not run in build container because PySide6 is not installed",
   "features": [
-    "rigid_end_offsets_static_solver",
-    "rigid_end_offsets_modal_solver",
-    "frame_consistent_mass_12x12",
-    "member_face_force_recovery",
-    "stability_dof_diagnostics",
-    "rigid_offset_assignment_ui",
-    "analytical_verification_suite"
+    "shell_mesh_quality_metrics_and_dock",
+    "principal_shell_moments_Mmax_Mmin_angle",
+    "smoothed_nodal_shell_contours",
+    "principal_contours_plan_and_3d",
+    "shell_quality_model_check_integration"
   ]
 }
